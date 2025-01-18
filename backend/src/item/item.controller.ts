@@ -5,6 +5,7 @@ import {
     Controller,
     Delete,
     Get,
+    InternalServerErrorException,
     NotFoundException,
     Param,
     Post,
@@ -18,6 +19,7 @@ import { ItemService } from './item.service';
 import { Item } from './schemas/item.schema';
 import { FindAllItemsDto } from './dto/find-all-items.dto';
 import { FindOneParams } from './dto/find-item.dto';
+import { UpdateItemParams } from './dto/update-item.dto';
 
 @Controller('item')
 export class ItemController {
@@ -63,8 +65,15 @@ export class ItemController {
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() createItemDto: CreateItemDto): Promise<Item> {
-        return this.itemService.update(id, createItemDto);
+    async update(@Param() params: UpdateItemParams, @Body() createItemDto: CreateItemDto): Promise<Item> {
+        try {
+            return await this.itemService.update(params.id, createItemDto);
+        } catch (error) {
+            if (error instanceof NotFoundException || error instanceof BadRequestException) {
+                throw error;
+            }
+            throw new InternalServerErrorException('Erro interno ao atualizar o item.');
+        }
     }
 
     @Delete(':id')
