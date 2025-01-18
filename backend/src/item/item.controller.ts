@@ -5,30 +5,31 @@ import { Item } from './schemas/item.schema';
 
 @Controller('item')
 export class ItemController {
-    constructor(private readonly clientsService: ItemService) {}
+    constructor(private readonly ItemService: ItemService) {}
 
     @Post()
-    create(@Body() createClientDto: CreateItemDto): Promise<Item> {
-        return this.clientsService.create(createClientDto);
+    create(@Body() createItemDto: CreateItemDto): Promise<Item> {
+        console.log(createItemDto);
+        return this.ItemService.create(createItemDto);
     }
 
     @Get()
     findAll(): Promise<Item[]> {
-        return this.clientsService.findAll();
+        return this.ItemService.findAll();
     }
 
     @Get(':id')
     findOne(@Param('id') id: string): Promise<Item> {
-        return this.clientsService.findOne(id);
+        return this.ItemService.findOne(id);
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() createClientDto: CreateItemDto): Promise<Item> {
-        return this.clientsService.update(id, createClientDto);
+    update(@Param('id') id: string, @Body() createItemDto: CreateItemDto): Promise<Item> {
+        return this.ItemService.update(id, createItemDto);
     }
 
     @Delete(':id')
     remove(@Param('id') id: string): Promise<void> {
-        return this.clientsService.remove(id);
+        return this.ItemService.remove(id);
     }
 }
