@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateClientDto } from './dto/create-client.dto';
-import { Client } from './schemas/client.schema';
+import { CreateItemDto } from './dto/create-item.dto';
+import { Item } from './schemas/item.schema';
 
 @Injectable()
-export class ClientsService {
-    constructor(@InjectModel(Client.name) private clientModel: Model<Client>) {}
+export class ItemService {
+    constructor(@InjectModel(Item.name) private clientModel: Model<Item>) {}
 
-    async create(createClientDto: CreateClientDto): Promise<Client> {
+    async create(createClientDto: CreateItemDto): Promise<Item> {
         try {
             const createdClient = new this.clientModel(createClientDto);
             return createdClient.save();
@@ -17,11 +17,11 @@ export class ClientsService {
         }
     }
 
-    async findAll(): Promise<Client[]> {
+    async findAll(): Promise<Item[]> {
         return this.clientModel.find().exec();
     }
 
-    async findOne(id: string): Promise<Client> {
+    async findOne(id: string): Promise<Item> {
         const client = await this.clientModel.findById(id).exec();
         if (!client) {
             throw new NotFoundException(`Client with ID ${id} not found`);
@@ -29,7 +29,7 @@ export class ClientsService {
         return client;
     }
 
-    async update(id: string, createClientDto: CreateClientDto): Promise<Client> {
+    async update(id: string, createClientDto: CreateItemDto): Promise<Item> {
         const updatedClient = await this.clientModel.findByIdAndUpdate(id, createClientDto, { new: true }).exec();
         if (!updatedClient) {
             throw new NotFoundException(`Client with ID ${id} not found`);
