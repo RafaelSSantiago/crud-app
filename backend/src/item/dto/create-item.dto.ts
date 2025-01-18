@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
-export class CreateClientDto {
+export class CreateItemDto {
     @IsNotEmpty()
     @IsString()
     title: string;
