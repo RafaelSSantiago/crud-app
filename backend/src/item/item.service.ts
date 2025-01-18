@@ -1,6 +1,7 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CastError } from 'mongoose/lib/error';
 import { CreateItemDto } from './dto/create-item.dto';
 import { Item } from './schemas/item.schema';
 import { FindAllItemsOptions } from './interfaces/find-all-items.interface';
@@ -39,11 +40,23 @@ export class ItemService {
     }
 
     async findOne(id: string): Promise<Item> {
-        const client = await this.itemModel.findById(id).exec();
-        if (!client) {
-            throw new NotFoundException(`Client with ID ${id} not found`);
+        try {
+            const item = await this.itemModel.findById(id).exec();
+
+            if (!item) {
+                throw new NotFoundException(`Item com ID ${id} não encontrado.`);
+            }
+
+            return item;
+        } catch (error) {
+            if (error instanceof CastError) {
+                throw new BadRequestException(`ID "${id}" inválido.`);
+            } else if (error instanceof NotFoundException) {
+                throw error;
+            } else {
+                throw new InternalServerErrorException('Erro interno ao buscar o item.');
+            }
         }
-        return client;
     }
 
     async update(id: string, createClientDto: CreateItemDto): Promise<Item> {
