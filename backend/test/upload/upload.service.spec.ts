@@ -1,67 +1,81 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UploadService } from '../../src/upload/upload.service';
-import * as fs from 'fs';
-import * as path from 'path';
+import { ItemController } from '../../src/item/item.controller';
+import { ItemService } from '../../src/item/item.service';
+import { BadRequestException } from '@nestjs/common';
 
-jest.mock('fs');
+describe('ItemController', () => {
+    let controller: ItemController;
+    let service: ItemService;
 
-describe('UploadService', () => {
-  let service: UploadService;
+    const mockItemService = {
+        create: jest.fn().mockImplementation((dto) => ({
+            id: Date.now(),
+            ...dto
+        }))
+    };
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UploadService],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            controllers: [ItemController],
+            providers: [
+                {
+                    provide: ItemService,
+                    useValue: mockItemService
+                }
+            ]
+        }).compile();
 
-    service = module.get<UploadService>(UploadService);
-  });
-
-  test('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
-  describe('saveFile', () => {
-    let mockFile: Express.Multer.File;
-    let uploadPath: string;
-    let filePath: string;
-
-    beforeEach(() => {
-      mockFile = {
-        originalname: 'test.txt',
-        buffer: Buffer.from('test content'),
-      } as Express.Multer.File;
-
-      uploadPath = path.join(__dirname, '..', '..', 'uploads');
-      filePath = path.join(uploadPath, mockFile.originalname);
-
-      (fs.existsSync as jest.Mock).mockClear();
-      (fs.mkdirSync as jest.Mock).mockClear();
-      (fs.writeFileSync as jest.Mock).mockClear();
+        controller = module.get<ItemController>(ItemController);
+        service = module.get<ItemService>(ItemService);
     });
 
-    test('should save a file and return the file path', () => {
-      (fs.existsSync as jest.Mock).mockReturnValue(false);
-      (fs.mkdirSync as jest.Mock).mockImplementation(jest.fn());
-      (fs.writeFileSync as jest.Mock).mockImplementation(jest.fn());
-
-      const result = service.saveFile(mockFile);
-
-      expect(fs.existsSync).toHaveBeenCalledWith(uploadPath);
-      expect(fs.mkdirSync).toHaveBeenCalledWith(uploadPath);
-      expect(fs.writeFileSync).toHaveBeenCalledWith(filePath, mockFile.buffer);
-      expect(result).toBe(`/uploads/${mockFile.originalname}`);
+    it('should be defined', () => {
+        expect(controller).toBeDefined();
     });
 
-    test('should not create directory if it already exists', () => {
-      (fs.existsSync as jest.Mock).mockReturnValue(true);
-      (fs.writeFileSync as jest.Mock).mockImplementation(() => true);
-
-      const result = service.saveFile(mockFile);
-
-      expect(fs.existsSync).toHaveBeenCalledWith(uploadPath);
-      expect(fs.mkdirSync).not.toHaveBeenCalled();
-      expect(fs.writeFileSync).toHaveBeenCalledWith(filePath, mockFile.buffer);
-      expect(result).toBe(`/uploads/${mockFile.originalname}`);
+    it('should create an item successfully', async () => {
+        const dto = {
+            title: 'Test Item',
+            description: 'Test Description',
+            photoUrl: 'http://example.com/image.png'
+        };
+        expect(await controller.create(dto)).toEqual({
+            id: expect.any(Number),
+            ...dto
+        });
+        expect(service.create).toHaveBeenCalledWith(dto);
     });
-  });
+
+    it('should throw BadRequestException when no properties are provided', async () => {
+        const dto = {};
+        try {
+            await controller.create(dto as any);
+        } catch (error) {
+            expect(error).toBeInstanceOf(BadRequestException);
+            expect(error.response.message).toEqual([
+                'O título é obrigatório.',
+                'A descrição é obrigatória.',
+                'A URL da foto é obrigatória.'
+            ]);
+        }
+    });
+
+    it('should throw BadRequestException when properties are invalid', async () => {
+        const dto = {
+            title: '',
+            description: 123,
+            photoUrl: 'invalid-url'
+        };
+        try {
+            await controller.create(dto as any);
+        } catch (error) {
+            expect(error).toBeInstanceOf(BadRequestException);
+            expect(error.response.message).toEqual([
+                'O título deve ser uma string.',
+                'O título é obrigatório.',
+                'A descrição deve ser uma string.',
+                'A URL da foto deve ser uma URL válida.'
+            ]);
+        }
+    });
 });
