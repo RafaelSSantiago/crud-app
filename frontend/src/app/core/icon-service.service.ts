@@ -40,11 +40,18 @@ export class IconService {
       )
     );
 
-    	this.iconReg.addSvgIcon(
-        'icon-perfil',
-        this.sanitizer.bypassSecurityTrustResourceUrl(
-          '/assets/icons/icon-perfil.svg'
-        )
-      );
+    this.iconReg.addSvgIcon(
+      'icon-nav-home-primary',
+      this.sanitizer.bypassSecurityTrustResourceUrl(
+        '/assets/icons/icon-nav-home-primary.svg'
+      )
+    );
+
+    this.iconReg.addSvgIcon(
+      'icon-perfil',
+      this.sanitizer.bypassSecurityTrustResourceUrl(
+        '/assets/icons/icon-perfil.svg'
+      )
+    );
   }
 }

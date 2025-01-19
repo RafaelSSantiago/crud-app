@@ -1,1 +1,18 @@
-<p style="background-color: black; font-size: 30px;">item works!</p>
+<section>
+  <div class="container-header">
+    <div class="container-busca">
+      <app-busca></app-busca>
+    </div>
+
+    <div class="conainter-add-item">
+      <div class="example-button-container">
+        <button mat-mini-fab aria-label="Adicionar item"
+          [ngStyle]="{'background-color': '#675AE7', 'color': '#fff'}">
+          <mat-icon>plus_one</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <app-item-list></app-item-list>
+</section>

@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ItemComponent } from './item.component';
 import { RouterModule, Routes } from '@angular/router';
+import { ItemListComponent } from './components/item-list/item-list.component';
+import { MaterialDesignModule } from 'src/app/shared/material-design/material-design.module';
+import { BuscaComponent } from './components/busca/busca.component';
 
 const ROUTES: Routes = [
   {
@@ -11,7 +14,7 @@ const ROUTES: Routes = [
 ];
 
 @NgModule({
-  declarations: [ItemComponent],
-  imports: [CommonModule, RouterModule.forChild(ROUTES)],
+  declarations: [ItemComponent, ItemListComponent, BuscaComponent],
+  imports: [CommonModule, RouterModule.forChild(ROUTES), MaterialDesignModule],
 })
 export class ItemModule {}
