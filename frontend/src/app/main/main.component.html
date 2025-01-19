@@ -1,0 +1,17 @@
+<mat-drawer-container class="main-container">
+  <mat-drawer #drawer mode="side" opened style="width: 250px;">
+    <div class="side-nav_container">
+        <div class="side-nav_container-dashboard">
+          <div>
+            <img src="assets/imgs/icons8-dashboard-48.png" alt="Dashboard Icon">
+          </div>
+          <p>Dashboard</p>
+        </div>
+    </div>
+
+  </mat-drawer>
+  <mat-drawer-content style="overflow: unset;">
+    <button mat-button (click)="toggleDrawer()">Toggle Drawer</button>
+    <app-item-list></app-item-list>
+  </mat-drawer-content>
+</mat-drawer-container>
