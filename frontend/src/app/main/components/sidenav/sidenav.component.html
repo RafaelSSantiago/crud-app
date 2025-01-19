@@ -1,0 +1,19 @@
+<div [ngStyle.gt-xs]="{ 'margin-left': '80px' }" class="sidenav-perfil">
+  <div fxLayout="column" fxLayoutAlign="start stretch" [ngStyle.xs]="{ height: 'calc(100% - 62px)' }">
+
+    <div>
+      <ul>
+        <li>
+          <a [routerLink]="'/itens'" routerLinkActive="router-link-active">
+            <span fxLayout="row" fxLayoutAlign="start center">
+              <mat-icon svgIcon="icon-perfil"></mat-icon>
+              <p>Itens</p>
+            </span>
+          </a>
+        </li>
+        <span class="divider"></span>
+      </ul>
+    </div>
+
+  </div>
+</div>
