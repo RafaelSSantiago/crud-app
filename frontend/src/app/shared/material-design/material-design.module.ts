@@ -22,6 +22,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [],
@@ -52,6 +53,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatButtonModule,
     MatCommonModule,
     MatSidenavModule,
+    MatTableModule,
   ],
   exports: [
     MatButtonModule,
@@ -80,6 +82,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     MatButtonModule,
     MatCommonModule,
     MatSidenavModule,
+    MatTableModule,
   ],
 })
 export class MaterialDesignModule {}
