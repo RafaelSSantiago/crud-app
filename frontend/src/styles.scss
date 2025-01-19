@@ -34,6 +34,10 @@ $meu-projeto-theme: mat.define-light-theme((
 @include mat.all-component-themes($meu-projeto-theme);
 
 /* You can add global styles to this file, and also import other style files */
-
+::ng-deep .mat-paginator {
+  border-radius: 12px; /* Define o raio das bordas */
+  overflow: hidden;    /* Garante que o conteúdo respeite o border-radius */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona sombra opcional */
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

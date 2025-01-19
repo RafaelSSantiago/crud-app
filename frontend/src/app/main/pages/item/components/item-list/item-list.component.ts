@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 
 interface PeriodicElement {
@@ -9,12 +9,15 @@ interface PeriodicElement {
   weight: number;
   symbol: string;
 }
+
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.scss'],
 })
-export class ItemListComponent {
+export class ItemListComponent implements AfterViewInit {
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   ELEMENT_DATA: PeriodicElement[] = [
     { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
     { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
@@ -37,24 +40,24 @@ export class ItemListComponent {
   dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
   selection = new SelectionModel<PeriodicElement>(true, []);
 
-  /** Whether the number of selected elements matches the total number of rows. */
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
   toggleAllRows() {
     if (this.isAllSelected()) {
       this.selection.clear();
       return;
     }
-
     this.selection.select(...this.dataSource.data);
   }
 
-  /** The label for the checkbox on the passed row */
   checkboxLabel(row?: PeriodicElement): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
