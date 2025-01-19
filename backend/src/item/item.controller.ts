@@ -21,7 +21,7 @@ import { FindAllItemsDto } from './dto/find-all-items.dto';
 import { FindOneParams } from './dto/find-item.dto';
 import { UpdateItemParams } from './dto/update-item.dto';
 
-@Controller('item')
+@Controller('api/item')
 export class ItemController {
     constructor(private readonly itemService: ItemService) {}
 
