@@ -1,6 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, INestApplication, ValidationPipe } from '@nestjs/common';
+
+const cors = {
+    origens: ['http://localhost:4200']
+};
+
+export const adicionaCors = (app: INestApplication, cors): void => {
+    app.enableCors({
+        origin: cors.origens,
+        methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
+        preflightContinue: false,
+        optionsSuccessStatus: 204,
+        credentials: true,
+        maxAge: 86400
+    });
+};
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
@@ -15,6 +30,7 @@ async function bootstrap() {
             }
         })
     );
+    adicionaCors(app, cors);
     await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

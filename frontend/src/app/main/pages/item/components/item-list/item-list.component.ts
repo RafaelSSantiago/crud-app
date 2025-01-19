@@ -1,56 +1,72 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  AfterViewInit,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
-
-interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+import { ItemService } from 'src/app/shared/services/item-service.service';
+import { Item } from 'src/app/shared/models/item';
+import { FindAllItemsResponse } from 'src/app/shared/models/find-all-items-response.interface';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.scss'],
 })
-export class ItemListComponent implements AfterViewInit {
+export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
+  itens: Item[] = [];
+  dataSource: MatTableDataSource<Item> = new MatTableDataSource<Item>(
+    this.itens
+  );
+  displayedColumns: string[] = ['select', 'id', 'title', 'description'];
+  selection: SelectionModel<Item> = new SelectionModel<Item>(true, []);
+
+  private subscriptions: Subscription = new Subscription();
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ELEMENT_DATA: PeriodicElement[] = [
-    { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-    { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-    { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-    { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-    { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-    { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-    { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-    { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-    { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-    { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-  ];
-  displayedColumns: string[] = [
-    'select',
-    'position',
-    'name',
-    'weight',
-    'symbol',
-  ];
-  dataSource = new MatTableDataSource<PeriodicElement>(this.ELEMENT_DATA);
-  selection = new SelectionModel<PeriodicElement>(true, []);
+  constructor(private readonly itemService: ItemService) {}
 
-  ngAfterViewInit() {
+  ngOnInit(): void {
+    this.fetchItems(1, 20);
+  }
+
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
-  isAllSelected() {
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  private fetchItems(page: number, limit: number): void {
+    const itemsSubscription = this.itemService
+      .buscarTodosOsItens(page, limit)
+      .subscribe(
+        (res: FindAllItemsResponse) => {
+          this.itens = res.data;
+          this.dataSource.data = this.itens;
+          console.log('Itens recebidos:', this.itens);
+        },
+        (error: any) => {
+          console.error('Erro ao buscar itens:', error);
+        }
+      );
+    this.subscriptions.add(itemsSubscription);
+  }
+
+  isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
-  toggleAllRows() {
+  toggleAllRows(): void {
     if (this.isAllSelected()) {
       this.selection.clear();
       return;
@@ -58,12 +74,12 @@ export class ItemListComponent implements AfterViewInit {
     this.selection.select(...this.dataSource.data);
   }
 
-  checkboxLabel(row?: PeriodicElement): string {
+  checkboxLabel(row?: Item): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row.position + 1
+      row._id
     }`;
   }
 }
