@@ -9,11 +9,11 @@
   flex-direction: column;
 
   .btn-menu {
-	cursor: pointer;
+    cursor: pointer;
 
     &.opened {
       p {
-        color: #f07400;
+        color: #675AE7;
         font-weight: 500;
         font-size: 13px;
       }
@@ -41,7 +41,7 @@
 
       &.router-link-active {
         p {
-          color: #f07400;
+          color: #675AE7;
           font-weight: 500;
           font-size: 13px;
         }
@@ -80,6 +80,7 @@
     top: 0;
     bottom: 0;
     z-index: 99;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   }
 
   @media screen and (max-width: 599px) {
