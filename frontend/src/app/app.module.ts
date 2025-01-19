@@ -1,21 +1,24 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MainComponent } from './main/main.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { IconService } from './core/icon-service.service';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HttpClientModule,
+    FlexLayoutModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [IconService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

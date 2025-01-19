@@ -1,1 +1,13 @@
-<p>main works!</p>
+<app-menu (toggleMenu)="sidenav.toggle()" [menuOpened]="sidenav.opened"></app-menu>
+<mat-sidenav-container class="example-container" style="min-height: 100vh">
+  <mat-sidenav #sidenav mode="over">
+    <app-sidenav></app-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content [ngStyle.gt-xs]="{ 'padding-left': '80px' }" style="min-height: 100vh">
+    <section fxFlex="100%" class="content">
+      <div style="margin-top: 60px">
+        <router-outlet></router-outlet>
+      </div>
+    </section>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,22 @@
+<div class="menu">
+  <ul>
+    <li>
+      <button mat-button (click)="toggleMenu.emit()" class="btn-menu" [class.opened]="menuOpened">
+        <span fxLayout="column" fxLayoutAlign="start center">
+          <mat-icon [svgIcon]="menuOpened ? 'icon-nav-menu-primary' : 'icon-nav-menu'"></mat-icon>
+          <p>Menu</p>
+        </span>
+      </button>
+    </li>
+    <ng-container *ngFor="let item of menu">
+      <li>
+        <a [routerLink]="item.rota ? [item.rota] : null" routerLinkActive="router-link-active" #rla="routerLinkActive">
+          <span fxLayout="column" fxLayoutAlign="start center">
+            <mat-icon [svgIcon]="rla.isActive ? item.icone + '-primary' : item.icone"></mat-icon>
+            <p>{{ item.titulo }}</p>
+          </span>
+        </a>
+      </li>
+    </ng-container>
+  </ul>
+</div>
