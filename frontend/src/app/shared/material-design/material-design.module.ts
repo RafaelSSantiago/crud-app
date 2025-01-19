@@ -23,6 +23,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 @NgModule({
   declarations: [],
@@ -54,6 +56,7 @@ import { MatTableModule } from '@angular/material/table';
     MatCommonModule,
     MatSidenavModule,
     MatTableModule,
+    MatPaginatorModule,
   ],
   exports: [
     MatButtonModule,
@@ -83,6 +86,7 @@ import { MatTableModule } from '@angular/material/table';
     MatCommonModule,
     MatSidenavModule,
     MatTableModule,
+    MatPaginatorModule
   ],
 })
 export class MaterialDesignModule {}
