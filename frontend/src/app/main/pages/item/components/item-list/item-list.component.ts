@@ -4,6 +4,8 @@ import {
   AfterViewInit,
   OnInit,
   OnDestroy,
+  Input,
+  SimpleChanges,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -19,6 +21,8 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./item-list.component.scss'],
 })
 export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() searchTerm: string = '';
+
   itens: Item[] = [];
   dataSource: MatTableDataSource<Item> = new MatTableDataSource<Item>(
     this.itens
@@ -33,18 +37,24 @@ export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private readonly itemService: ItemService) {}
 
   ngOnInit(): void {
-    this.fetchItems(1, 20);
+    this.buscarItens(1, 20);
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['searchTerm']) {
+      this.aplicarFiltro(this.searchTerm);
+    }
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 
-  private fetchItems(page: number, limit: number): void {
+  private buscarItens(page: number, limit: number): void {
     const itemsSubscription = this.itemService
       .buscarTodosOsItens(page, limit)
       .subscribe(
@@ -60,26 +70,55 @@ export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.subscriptions.add(itemsSubscription);
   }
 
-  isAllSelected(): boolean {
+  aplicarFiltro(searchTerm: string): void {
+    // Busca local
+    const itensFiltrados = this.itens.filter((item) =>
+      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    if (itensFiltrados.length > 0) {
+      this.dataSource.data = itensFiltrados;
+    } else {
+      // Busca no backend por ID
+      this.itemService.buscarItemPorId(searchTerm).subscribe(
+        (item: Item) => {
+          if (item) {
+            this.dataSource.data = [item];
+          } else {
+            console.warn('Nenhum item encontrado.');
+            this.dataSource.data = [];
+          }
+        },
+        (error: any) => {
+          console.error('Erro ao buscar item por ID:', error);
+          this.dataSource.data = [];
+        }
+      );
+    }
+  }
+
+  todosSelecionados(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
 
-  toggleAllRows(): void {
-    if (this.isAllSelected()) {
+  alternarTodasLinhas(): void {
+    if (this.todosSelecionados()) {
       this.selection.clear();
       return;
     }
     this.selection.select(...this.dataSource.data);
   }
 
-  checkboxLabel(row?: Item): string {
+  rotuloCheckbox(row?: Item): string {
     if (!row) {
-      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+      return `${
+        this.todosSelecionados() ? 'deselecionar' : 'selecionar'
+      } todos`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${
-      row._id
-    }`;
+    return `${
+      this.selection.isSelected(row) ? 'deselecionar' : 'selecionar'
+    } linha ${row._id}`;
   }
 }

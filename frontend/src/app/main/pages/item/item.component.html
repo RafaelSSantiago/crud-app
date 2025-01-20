@@ -1,7 +1,7 @@
 <section>
   <div class="container-header">
     <div class="container-busca">
-      <app-busca></app-busca>
+      <app-busca (busca)="handleBusca($event)"></app-busca>
     </div>
 
     <div class="conainter-add-item">
@@ -14,5 +14,5 @@
     </div>
   </div>
   <mat-divider></mat-divider>
-  <app-item-list></app-item-list>
+  <app-item-list [searchTerm]="searchTerm"></app-item-list>
 </section>

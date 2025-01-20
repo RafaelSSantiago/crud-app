@@ -60,4 +60,10 @@ export class ItemService {
       .delete<void>(`${this.apiUrl}/${id}`)
       .pipe(catchError(this.handleError('Erro ao deletar item')));
   }
+
+  buscarItemPorId(id: string): Observable<Item> {
+    return this.http
+      .get<Item>(`${this.apiUrl}/${id}`)
+      .pipe(catchError(this.handleError('Erro ao buscar item por ID')));
+  }
 }
