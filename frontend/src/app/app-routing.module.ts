@@ -7,7 +7,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./main/pages/item/item.module').then((m) => m.ItemModule),
   },
-  // Adicione outras rotas aqui, se necessário
   {
     path: '',
     redirectTo: '/item',

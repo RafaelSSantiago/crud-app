@@ -4,7 +4,6 @@ import { ItemListComponent } from './components/item-list/item-list.component';
 import { ItemDetailsComponent } from './components/item-details/item-details.component';
 import { ItemComponent } from './item.component';
 
-
 const routes: Routes = [
   {
     path: '',
@@ -16,7 +15,7 @@ const routes: Routes = [
       },
       {
         path: ':id',
-        component: ItemDetailsComponent, 
+        component: ItemDetailsComponent,
       },
     ],
   },
