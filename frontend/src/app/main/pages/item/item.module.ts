@@ -6,21 +6,29 @@ import { ItemListComponent } from './components/item-list/item-list.component';
 import { MaterialDesignModule } from 'src/app/shared/material-design/material-design.module';
 import { BuscaComponent } from './components/busca/busca.component';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { ItemDetailsComponent } from './components/item-details/item-details.component';
+import { ItemRoutingModule } from './item-routing.module';
 
-const ROUTES: Routes = [
-  {
-    path: '',
-    component: ItemComponent,
-  },
-];
+// const ROUTES: Routes = [
+//   {
+//     path: '',
+//     component: ItemComponent,
+//   },
+// ];
 
 @NgModule({
-  declarations: [ItemComponent, ItemListComponent, BuscaComponent],
+  declarations: [
+    ItemComponent,
+    ItemListComponent,
+    BuscaComponent,
+    ItemDetailsComponent,
+  ],
   imports: [
     CommonModule,
-    RouterModule.forChild(ROUTES),
+    // RouterModule.forChild(ROUTES),
     MaterialDesignModule,
     SharedModule,
+    ItemRoutingModule,
   ],
 })
 export class ItemModule {}

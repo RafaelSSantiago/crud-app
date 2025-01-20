@@ -1,19 +1,20 @@
+
 import {
   Component,
-  ViewChild,
-  AfterViewInit,
   OnInit,
+  AfterViewInit,
   OnDestroy,
-  Input,
-  SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Subscription } from 'rxjs';
 import { ItemService } from 'src/app/shared/services/item-service.service';
 import { Item } from 'src/app/shared/models/item';
+import { SearchService } from 'src/app/shared/services/search.service';
 import { FindAllItemsResponse } from 'src/app/shared/models/find-all-items-response.interface';
-import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-item-list',
@@ -21,8 +22,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./item-list.component.scss'],
 })
 export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() searchTerm: string = '';
-
   itens: Item[] = [];
   dataSource: MatTableDataSource<Item> = new MatTableDataSource<Item>(
     this.itens
@@ -34,20 +33,25 @@ export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private readonly itemService: ItemService) {}
+  constructor(
+    private readonly itemService: ItemService,
+    private readonly searchService: SearchService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.buscarItens(1, 20);
+
+    const searchSubscription = this.searchService.searchTerm$.subscribe(
+      (term) => {
+        this.aplicarFiltro(term);
+      }
+    );
+    this.subscriptions.add(searchSubscription);
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['searchTerm']) {
-      this.aplicarFiltro(this.searchTerm);
-    }
   }
 
   ngOnDestroy(): void {
@@ -71,19 +75,34 @@ export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   aplicarFiltro(searchTerm: string): void {
+    console.log('Aplicando filtro com termo:', searchTerm);
+
+    if (!searchTerm) {
+      this.dataSource.data = this.itens;
+      console.log('Termo vazio. Mostrando todos os itens.');
+      return;
+    }
+
     // Busca local
     const itensFiltrados = this.itens.filter((item) =>
       item.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    console.log('Itens filtrados localmente:', itensFiltrados);
+
     if (itensFiltrados.length > 0) {
       this.dataSource.data = itensFiltrados;
+      console.log('DataSource atualizado com itens filtrados locais.');
     } else {
       // Busca no backend por ID
       this.itemService.buscarItemPorId(searchTerm).subscribe(
         (item: Item) => {
           if (item) {
             this.dataSource.data = [item];
+            console.log(
+              'DataSource atualizado com item encontrado por ID:',
+              item
+            );
           } else {
             console.warn('Nenhum item encontrado.');
             this.dataSource.data = [];
@@ -120,5 +139,9 @@ export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
     return `${
       this.selection.isSelected(row) ? 'deselecionar' : 'selecionar'
     } linha ${row._id}`;
+  }
+
+  navegarParaDetalhes(row: Item): void {
+    this.router.navigate(['/item', row._id]);
   }
 }
