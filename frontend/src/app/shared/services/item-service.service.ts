@@ -10,6 +10,7 @@ import { FindAllItemsResponse } from '../models/find-all-items-response.interfac
 })
 export class ItemService {
   private apiUrl = 'http://localhost:3000/api/item';
+  private uploadUrl = 'http://localhost:3000/api/upload';
 
   constructor(private http: HttpClient) {}
 
@@ -65,5 +66,20 @@ export class ItemService {
     return this.http
       .get<Item>(`${this.apiUrl}/${id}`)
       .pipe(catchError(this.handleError('Erro ao buscar item por ID')));
+  }
+
+  uploadPhoto(file: File): Observable<{ url: string }> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http
+      .post<{ url: string }>(this.uploadUrl, formData)
+      .pipe(
+        catchError(
+          this.handleError(
+            'Ocorreu um erro ao fazer o upload da foto. Por favor, tente novamente mais tarde.'
+          )
+        )
+      );
   }
 }

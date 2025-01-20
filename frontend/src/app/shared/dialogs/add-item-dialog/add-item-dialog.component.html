@@ -1,0 +1,42 @@
+<h1 mat-dialog-title class="custom-dialog-title">Adicionar Novo Item</h1>
+<div mat-dialog-content class="custom-dialog-content">
+  <form [formGroup]="addItemForm" class="custom-form-content">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Título</mat-label>
+      <input matInput formControlName="title" required>
+      <mat-error *ngIf="addItemForm.get('title')?.hasError('required')">
+        Título é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição</mat-label>
+      <textarea matInput formControlName="description" required></textarea>
+      <mat-error *ngIf="addItemForm.get('description')?.hasError('required')">
+        Descrição é obrigatória
+      </mat-error>
+    </mat-form-field>
+
+    <div class="file-upload">
+      <label class="file-upload-label">Upload de Foto:</label>
+      <div class="upload-container">
+        <input type="file" id="file" (change)="onFileSelected($event)" accept="image/*" hidden>
+        <button mat-raised-button color="primary" (click)="triggerFileInput()">
+          <mat-icon>upload</mat-icon> Selecionar Foto
+        </button>
+        <span *ngIf="selectedFileName" class="file-name">{{ selectedFileName }}</span>
+      </div>
+      <mat-error *ngIf="!selectedFile">
+        Uma foto é obrigatória
+      </mat-error>
+      <div *ngIf="previewUrl" class="image-preview">
+        <img [src]="previewUrl" alt="Pré-visualização da Foto">
+      </div>
+    </div>
+  </form>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSubmit()"
+    [disabled]="!addItemForm.valid || !selectedFile">Adicionar</button>
+</div>

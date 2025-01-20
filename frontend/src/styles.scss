@@ -39,5 +39,31 @@ $meu-projeto-theme: mat.define-light-theme((
   overflow: hidden;    /* Garante que o conteúdo respeite o border-radius */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona sombra opcional */
 }
+
+
+/* Snackbar de Sucesso */
+.snackbar-success {
+  background-color: #4caf50 !important; /* Verde */
+  color: #fff !important;
+}
+
+/* Snackbar de Erro */
+.snackbar-error {
+  background-color: #f44336 !important; /* Vermelho */
+  color: #fff !important;
+}
+
+/* Snackbar de Aviso */
+.snackbar-warning {
+  background-color: #ff9800 !important; /* Laranja */
+  color: #fff !important;
+}
+
+/* Snackbar de Informação */
+.snackbar-info {
+  background-color: #2196f3 !important; /* Azul */
+  color: #fff !important;
+}
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

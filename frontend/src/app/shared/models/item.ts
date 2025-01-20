@@ -1,5 +1,5 @@
 export interface Item {
-  _id: string;
+  _id?: string;
   title: string;
   description: string;
   photoUrl: string;

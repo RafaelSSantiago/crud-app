@@ -1,0 +1,55 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.custom-dialog-title {
+  text-align: center;
+  padding: 16px;
+  font-size: 24px;
+}
+
+.custom-dialog-content {
+  padding: 20px 0 !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.file-upload {
+  margin-top: 20px;
+}
+
+.file-upload-label {
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.upload-container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.upload-container button {
+  margin-right: 15px;
+}
+
+.file-name {
+  font-style: italic;
+  color: #555;
+}
+
+.image-preview {
+  margin-top: 15px;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}

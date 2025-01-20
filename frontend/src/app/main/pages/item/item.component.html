@@ -7,7 +7,8 @@
     <div class="conainter-add-item">
       <div class="example-button-container">
         <button mat-mini-fab aria-label="Adicionar item"
-          [ngStyle]="{'background-color': '#675AE7', 'color': '#fff'}">
+          [ngStyle]="{'background-color': '#675AE7', 'color': '#fff'}"
+          (click)="openAddItemDialog()">
           <mat-icon>plus_one</mat-icon>
         </button>
       </div>
