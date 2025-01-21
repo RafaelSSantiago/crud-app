@@ -141,7 +141,13 @@ export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
     } linha ${row._id}`;
   }
 
-  navegarParaDetalhes(row: Item): void {
-    this.router.navigate(['/item', row._id]);
+   navegarParaDetalhes(row: Item): void {
+      this.router.navigate(['/item', row._id], {
+        queryParams: {
+          title: row.title,
+          description: row.description,
+          photoUrl: row.photoUrl, // Adicione photoUrl
+        },
+      });
   }
 }

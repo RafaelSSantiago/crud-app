@@ -1,1 +1,39 @@
-<p>item-details works!</p>
+<section class="container-details">
+  <div class="breadcrumb">
+    <button mat-button color="primary" (click)="voltar()">
+      <mat-icon>arrow_back</mat-icon>
+      Voltar
+    </button>
+  </div>
+  <h2>Detalhes do Item</h2>
+  <div class="details-content">
+    <div class="photo-preview">
+      <img [src]="itemForm.get('photoUrl')?.value" alt="Foto do Item">
+    </div>
+    <form [formGroup]="itemForm" (ngSubmit)="onSubmit()">
+      <div *ngIf="itemForm">
+        <mat-form-field appearance="outline">
+          <mat-label>ID</mat-label>
+          <input matInput formControlName="_id">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Título</mat-label>
+          <input matInput formControlName="title">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="submit">Salvar</button>
+        </div>
+      </div>
+      <div *ngIf="!itemForm">
+        <p>Carregando detalhes do item...</p>
+      </div>
+    </form>
+  </div>
+</section>

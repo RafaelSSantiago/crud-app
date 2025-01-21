@@ -1,0 +1,92 @@
+.container-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+
+  .breadcrumb {
+    align-self: flex-start;
+    margin-bottom: 16px;
+
+    button {
+      display: flex;
+      align-items: center;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+
+  h2 {
+    margin-bottom: 16px;
+    font-weight: 400;
+    padding-bottom: 40px;
+  }
+
+  .details-content {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+
+    .photo-preview {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      img {
+        max-width: 100%;
+        max-height: 400px;
+        border-radius: 8px;
+      }
+    }
+
+    form {
+      flex: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 400px; // Define um tamanho máximo para o formulário
+      margin: 0 auto; // Centraliza o formulário
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      button {
+        align-self: flex-end;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .container-details {
+    padding: 8px;
+
+    .details-content {
+      flex-direction: column;
+      gap: 8px;
+
+      .photo-preview {
+        img {
+          max-width: 100%;
+          max-height: 300px; // Ajuste a altura máxima da imagem para telas menores
+        }
+      }
+
+      form {
+        gap: 8px;
+        max-width: 100%; // Permite que o formulário ocupe toda a largura disponível em telas menores
+
+        mat-form-field {
+          width: 100%;
+        }
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
