@@ -8,9 +8,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationService } from './services/notification-service/notification.service';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog-component/confirm-dialog.component';
 
 @NgModule({
-  declarations: [AddItemDialogComponent],
+  declarations: [AddItemDialogComponent, ConfirmDialogComponent],
   providers: [DialogService, NotificationService],
   imports: [
     CommonModule,

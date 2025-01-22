@@ -51,15 +51,16 @@ export class ItemService {
   }
 
   atualizarItem(item: Item): Observable<Item> {
-    const id = item._id
-    delete item._id
+    const id = item._id;
+    delete item._id;
 
     return this.http
       .put<Item>(`${this.apiUrl}/${id}`, item)
       .pipe(catchError(this.handleError('Erro ao atualizar item')));
   }
 
-  deletarItem(id: number): Observable<void> {
+
+  deletarItem(id: string): Observable<void> {
     return this.http
       .delete<void>(`${this.apiUrl}/${id}`)
       .pipe(catchError(this.handleError('Erro ao deletar item')));

@@ -1,4 +1,3 @@
-
 import {
   Component,
   OnInit,
@@ -15,6 +14,7 @@ import { Item } from 'src/app/shared/models/item';
 import { SearchService } from 'src/app/shared/services/search.service';
 import { FindAllItemsResponse } from 'src/app/shared/models/find-all-items-response.interface';
 import { Router } from '@angular/router';
+import { DialogService } from 'src/app/shared/dialogs/dialog.service';
 
 @Component({
   selector: 'app-item-list',
@@ -26,7 +26,13 @@ export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource: MatTableDataSource<Item> = new MatTableDataSource<Item>(
     this.itens
   );
-  displayedColumns: string[] = ['select', 'id', 'title', 'description'];
+  displayedColumns: string[] = [
+    'select',
+    'id',
+    'title',
+    'description',
+    'delete',
+  ];
   selection: SelectionModel<Item> = new SelectionModel<Item>(true, []);
 
   private subscriptions: Subscription = new Subscription();
@@ -36,7 +42,8 @@ export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private readonly itemService: ItemService,
     private readonly searchService: SearchService,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -141,13 +148,27 @@ export class ItemListComponent implements OnInit, AfterViewInit, OnDestroy {
     } linha ${row._id}`;
   }
 
-   navegarParaDetalhes(row: Item): void {
-      this.router.navigate(['/item', row._id], {
-        queryParams: {
-          title: row.title,
-          description: row.description,
-          photoUrl: row.photoUrl, // Adicione photoUrl
-        },
-      });
+  navegarParaDetalhes(row: Item): void {
+    this.router.navigate(['/item', row._id], {
+      queryParams: {
+        title: row.title,
+        description: row.description,
+        photoUrl: row.photoUrl,
+      },
+    });
+  }
+
+  dialogConfirmacaoExclusao(id: string): void {
+    const dialogRef = this.dialogService.openConfirmDialog();
+
+    dialogRef.subscribe((res) => {
+      this.excluirItem(id);
+    });
+  }
+
+  excluirItem(id: string): void {
+    this.itemService.deletarItem(id).subscribe(() => {
+      this.buscarItens(1, 20);
+    });
   }
 }
