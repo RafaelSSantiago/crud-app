@@ -1,6 +1,7 @@
-import { IsMongoId } from "class-validator";
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class FindOneParams {
-    @IsMongoId({ message: 'O parâmetro "id" deve ser um Mongo ID válido.' })
+    @IsString({ message: 'ID deve ser uma string' })
+    @IsNotEmpty({ message: 'ID não pode ser vazio' })
     id: string;
 }

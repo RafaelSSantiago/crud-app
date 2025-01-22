@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateItemDto {
     @IsNotEmpty({ message: 'O título é obrigatório.' })
@@ -10,6 +10,5 @@ export class CreateItemDto {
     description: string;
 
     @IsNotEmpty({ message: 'A URL da foto é obrigatória.' })
-    // @IsUrl({}, { message: 'A URL da foto deve ser uma URL válida.' })
     photoUrl: string;
 }

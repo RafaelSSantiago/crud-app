@@ -51,8 +51,11 @@ export class ItemService {
   }
 
   atualizarItem(item: Item): Observable<Item> {
+    const id = item._id
+    delete item._id
+
     return this.http
-      .put<Item>(`${this.apiUrl}/${item._id}`, item)
+      .put<Item>(`${this.apiUrl}/${id}`, item)
       .pipe(catchError(this.handleError('Erro ao atualizar item')));
   }
 

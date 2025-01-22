@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Item } from 'src/app/shared/models/item';
-import { ItemService } from 'src/app/shared/services/item-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ItemService } from 'src/app/shared/services/item-service.service';
+
 
 @Component({
   selector: 'app-item-details',
@@ -16,7 +17,8 @@ export class ItemDetailsComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private itemService: ItemService
   ) {}
 
   ngOnInit(): void {
@@ -39,10 +41,19 @@ export class ItemDetailsComponent {
   }
 
   onSubmit(): void {
-    if (this.itemForm.valid) {
-      const updatedItem = this.itemForm.getRawValue();
-      console.log('Item atualizado:', updatedItem);
-    }
+  if (this.itemForm.valid) {
+    const updatedItem = this.itemForm.getRawValue();
+    this.itemService.atualizarItem(updatedItem).subscribe(
+      (response) => {
+        console.log('Item atualizado com sucesso:', response);
+        // Redirecionar ou mostrar mensagem de sucesso
+      },
+      (error) => {
+        console.error('Erro ao atualizar item:', error);
+        // Mostrar mensagem de erro
+      }
+    );
+  }
   }
 
   voltar(): void {

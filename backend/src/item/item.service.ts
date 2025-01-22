@@ -6,6 +6,7 @@ import { CreateItemDto } from './dto/create-item.dto';
 import { Item } from './schemas/item.schema';
 import { FindAllItemsOptions } from './interfaces/find-all-items.interface';
 import { SortOrder } from 'mongoose';
+import { UpdateItemParams } from './dto/update-item.dto';
 
 @Injectable()
 export class ItemService {
@@ -16,7 +17,7 @@ export class ItemService {
             const createdClient = new this.itemModel(createClientDto);
             return createdClient.save();
         } catch (error: any) {
-            throw new Error(`error creating client: ${error.message}`);
+            throw new Error(`Erro ao criar cliente: ${error.message}`);
         }
     }
 
@@ -59,10 +60,10 @@ export class ItemService {
         }
     }
 
-    async update(id: string, createClientDto: CreateItemDto): Promise<Item> {
+    async update(id: string, createClientDto: UpdateItemParams): Promise<Item> {
         const updatedClient = await this.itemModel.findByIdAndUpdate(id, createClientDto, { new: true }).exec();
         if (!updatedClient) {
-            throw new NotFoundException(`Client with ID ${id} not found`);
+            throw new NotFoundException(`Cliente com ID ${id} não encontrado.`);
         }
         return updatedClient;
     }
@@ -70,7 +71,7 @@ export class ItemService {
     async remove(id: string): Promise<void> {
         const result = await this.itemModel.findByIdAndDelete(id).exec();
         if (!result) {
-            throw new NotFoundException(`Client with ID ${id} not found`);
+            throw new NotFoundException(`Cliente com ID ${id} não encontrado.`);
         }
     }
 

@@ -19,7 +19,7 @@ import { ItemService } from './item.service';
 import { Item } from './schemas/item.schema';
 import { FindAllItemsDto } from './dto/find-all-items.dto';
 import { FindOneParams } from './dto/find-item.dto';
-import { UpdateItemParams } from './dto/update-item.dto';
+import { ParamUpdateItem, UpdateItemParams } from './dto/update-item.dto';
 
 @Controller('api/item')
 export class ItemController {
@@ -65,7 +65,7 @@ export class ItemController {
     }
 
     @Put(':id')
-    async update(@Param() params: UpdateItemParams, @Body() createItemDto: CreateItemDto): Promise<Item> {
+    async update(@Param() params: ParamUpdateItem, @Body() createItemDto: UpdateItemParams): Promise<Item> {
         try {
             return await this.itemService.update(params.id, createItemDto);
         } catch (error) {
